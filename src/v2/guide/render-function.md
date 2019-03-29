@@ -4,7 +4,7 @@ type: guide
 order: 303
 ---
 
-## Basics
+## Pengetahuan Dasar
 
 Vue menyarankan menggunakan templat untuk membangun HTML anda pada sebagian besar kasus. Terdapat beberapa situasi dimana anda memerlukan kemampuan penuh dari pemrograman Javascript. Disanalah anda dapat menggunakan **render function**, sebuah alternatif *"lebih dekat dengan kompiler"* untuk templat.
 
@@ -82,9 +82,9 @@ Vue.component('anchored-heading', {
 
 Jauh lebih sederhana! Setidaknya. Baris kode yang ditulis lebih pendek, namun juga memerlukan pengetahuan lebih dengan properti Vue *instance*. Pada kasus ini, anda hanya perlu mengetahui kapan harus melemparkan anak elemen tanpa menggunakan `slot` atribut ke dalam komponen, seperti`Hello world!` di dalam `anchored-heading`, anak elemen tersebuk disimpan dalam *instance* komponen pada `&slot.default`. Jika anda belum mengerti, **maka sangat disarankan untuk membaca [API untuk properti instance](../api/#Instance-Properties)  sebelum mulai menggunakan *render function* **
 
-## Nodes, Trees, and the Virtual DOM
+## Simpul, Pohon, dan DOM Virtual
 
-Before we dive into render functions, it’s important to know a little about how browsers work. Take this HTML for example:
+Sebelum kita membahas *render function*, penting kita ketahui untuk mengerti bagaimana peramban bekerja. Ambil HTML ini sebagai contoh:
 
 ```html
 <div>
@@ -93,40 +93,38 @@ Before we dive into render functions, it’s important to know a little about ho
   <!-- TODO: Add tagline  -->
 </div>
 ```
+Ketika peramban membaca baris kode ini, ia membuat sebuah [pohon dari "simpul DOM"](https://javascript.info/dom-nodes) untuk membantu melacak segala hal, sama seperti saat anda membuat pohon keluarga untuk melacak seluruh anggota keluarga terjauh anda.
 
-When a browser reads this code, it builds a [tree of "DOM nodes"](https://javascript.info/dom-nodes) to help it keep track of everything, just as you might build a family tree to keep track of your extended family.
+Pohon simpul DOM untuk HTML diatas akan terlihat seperti berikut:
 
-The tree of DOM nodes for the HTML above looks like this:
+![Visualization pohon DOM](/images/dom-tree.png)
 
-![DOM Tree Visualization](/images/dom-tree.png)
+Seluruh elemen merupakan simpul. Setiap bagian dari teks adalah simpul. Bahkan seluruh komentar juga merupakan simpul! Sebuah simpul hanya sebuah bagian dari sebuah halaman. Sama seperti pada pohon keluarga, tiap simpul dapan memiliki anak (contoh tiap bagian bisa mengandung bagian lainnya).
 
-Every element is a node. Every piece of text is a node. Even comments are nodes! A node is just a piece of the page. And as in a family tree, each node can have children (i.e. each piece can contain other pieces).
-
-Updating all these nodes efficiently can be difficult, but thankfully, you never have to do it manually. Instead, you tell Vue what HTML you want on the page, in a template:
+Memperbarui semua simpul dengan efisien dapat menjadi susah, namun untungnya, anda tidak harus melakukannya secara manual. Sebagai gantinya, anda dapat memberitahu HTML apa yang ingin anda tampilkan pada halaman dalam sebuah templat:
 
 ```html
 <h1>{{ blogTitle }}</h1>
 ```
 
-Or a render function:
+Atau dalam sebuah *render function*
 
 ``` js
 render: function (createElement) {
   return createElement('h1', this.blogTitle)
 }
 ```
-
-And in both cases, Vue automatically keeps the page updated, even when `blogTitle` changes.
+Dan untuk kedua kasus, Vue secara otomatis menjaga seluruh halaman diperbarui, bahkan saat `blogTitle` berubah.
 
 ### The Virtual DOM
 
-Vue accomplishes this by building a **virtual DOM** to keep track of the changes it needs to make to the real DOM. Taking a closer look at this line:
+Vue menyelesaikan hal ini dengan membuat sebuah ***DOM Virtual*** untuk melacak perubahan yang diperlukan untuk membuat DOM asli. Coba lihat lebih dalam pada baris kode berikut:
 
 ``` js
 return createElement('h1', this.blogTitle)
 ```
 
-What is `createElement` actually returning? It's not _exactly_ a real DOM element. It could perhaps more accurately be named `createNodeDescription`, as it contains information describing to Vue what kind of node it should render on the page, including descriptions of any child nodes. We call this node description a "virtual node", usually abbreviated to **VNode**. "Virtual DOM" is what we call the entire tree of VNodes, built by a tree of Vue components.
+Apa sebenarnya yang kembalikan oleh `createElement`? Hal itu bukan sebuah DOM asli yang *sebenernya*. Ia mungkin lebih tepat disebut `createNodeDescription`, dimana ia mengandung informasi yang menggambarkan ke Vue hal apa yang harus ditampilkan pada halaman, termasuk deskripsi untuk tiap anak simpul. Kita dapat menyebut simpul ini sebagai "Virual Node atau simpul virtual", yang biasa disingkat menjadi **VNode**. "DOM Virtual" adalah apa yang kita sebut sebagai seluruh pohon dari *VNodes*, yang dibangun oleh sebuah pohon dari komponen Vue. 
 
 ## `createElement` Arguments
 
