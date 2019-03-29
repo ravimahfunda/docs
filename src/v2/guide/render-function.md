@@ -6,9 +6,9 @@ order: 303
 
 ## Basics
 
-Vue recommends using templates to build your HTML in the vast majority of cases. There are situations however, where you really need the full programmatic power of JavaScript. That's where you can use the **render function**, a closer-to-the-compiler alternative to templates.
+Vue menyarankan menggunakan templat untuk membangun HTML anda pada sebagian besar kasus. Terdapat beberapa situasi dimana anda memerlukan kemampuan penuh dari pemrograman Javascript. Disanalah anda dapat menggunakan **render function**, sebuah alternatif *"lebih dekat dengan kompiler"* untuk templat.
 
-Let's dive into a simple example where a `render` function would be practical. Say you want to generate anchored headings:
+Mari kita coba contoh sederhana dimana `render` *function* akan diterapkan. Misalkan anda ingin menghasilkan headings yang memiliki jangkaran:
 
 ``` html
 <h1>
@@ -18,13 +18,12 @@ Let's dive into a simple example where a `render` function would be practical. S
 </h1>
 ```
 
-For the HTML above, you decide you want this component interface:
+Untuk HTML diatas, anda memutuskan untuk memilih komponen antarmuka berikut:
 
 ``` html
 <anchored-heading :level="1">Hello world!</anchored-heading>
 ```
-
-When you get started with a component that only generates a heading based on the `level` prop, you quickly arrive at this:
+Ketika anda memulai dengan sebuah komponen yang hanya menghasilkan sebuah heading berdasarkan pada `level` prop, anda menjumpai hal seperti ini: 
 
 ``` html
 <script type="text/x-template" id="anchored-heading-template">
@@ -60,10 +59,9 @@ Vue.component('anchored-heading', {
   }
 })
 ```
+Templat ini tidak terasa begitu indah. Ia tidak hanya tidak efektif, bahkan kita melakukan dupilkasi pada `<slot></slot>` untuk setiap tingkatan heading serta akan melakukan hal yang sama pada elemen berjangkar.
 
-That template doesn't feel great. It's not only verbose, but we're duplicating `<slot></slot>` for every heading level and will have to do the same when we add the anchor element.
-
-While templates work great for most components, it's clear that this isn't one of them. So let's try rewriting it with a `render` function:
+Ketia templat bekerja dengan baik untuk sebagian besar komponen, hal ini jelas bahwa tidak pada kasus ini. Mari kita coba menulis ulangnya dengan menggunakan `render` *function*:
 
 ``` js
 Vue.component('anchored-heading', {
@@ -82,7 +80,7 @@ Vue.component('anchored-heading', {
 })
 ```
 
-Much simpler! Sort of. The code is shorter, but also requires greater familiarity with Vue instance properties. In this case, you have to know that when you pass children without a `slot` attribute into a component, like the `Hello world!` inside of `anchored-heading`, those children are stored on the component instance at `$slots.default`. If you haven't already, **it's recommended to read through the [instance properties API](../api/#Instance-Properties) before diving into render functions.**
+Jauh lebih sederhana! Setidaknya. Baris kode yang ditulis lebih pendek, namun juga memerlukan pengetahuan lebih dengan properti Vue *instance*. Pada kasus ini, anda hanya perlu mengetahui kapan harus melemparkan anak elemen tanpa menggunakan `slot` atribut ke dalam komponen, seperti`Hello world!` di dalam `anchored-heading`, anak elemen tersebuk disimpan dalam *instance* komponen pada `&slot.default`. Jika anda belum mengerti, **maka sangat disarankan untuk membaca [API untuk properti instance](../api/#Instance-Properties)  sebelum mulai menggunakan *render function* **
 
 ## Nodes, Trees, and the Virtual DOM
 
